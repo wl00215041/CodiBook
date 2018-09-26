@@ -1,0 +1,20 @@
+version: '2'
+services:
+  db:
+    image: mariadb
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=laraveldb
+  app:
+    image: 10.90.1.2:5100/codibook:beta
+    ports:
+      - 8888:8181
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_DATABASE=laraveldb
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
