@@ -3,6 +3,7 @@ MAINTAINER Sam Li
 RUN apt-get update -y && apt-get install -y openssl zip unzip git
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN docker-php-ext-install pdo mbstring pdo_mysql
+ENV APP_NAME=CodiBook
 ENV DB_HOST=192.168.1.1
 ENV DB_USERNAME=root
 ENV DB_PASSWORD=default

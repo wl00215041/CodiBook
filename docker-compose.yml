@@ -3,7 +3,7 @@ services:
   db:
     image: mariadb
     volumes:
-      - db:/var/lib/mysql
+      - codibook-db:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=laraveldb
