@@ -1,6 +1,7 @@
 pipeline:
   docker:
     image: plugins/docker
-    repo: 10.90.1.2:5100/promise/codibook
+    registry: 10.90.1.2:5100
+    repo: promise/codibook
     insecure: true
     dockerfile: Dockerfile
