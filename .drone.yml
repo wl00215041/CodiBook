@@ -1,5 +1,5 @@
 pipeline:
   docker:
     image: plugins/docker
-    repo: promise/codibook
+    repo: 10.90.1.2:5100/promise/codibook
     dockerfile: Dockerfile
