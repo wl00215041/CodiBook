@@ -50,9 +50,22 @@ Route::put('/book/{id}', function($id, Request $request){
     $modifyDate = array();
     $markdown = $request->input('markdown', false);
     $isPublic = $request->input('isPublic', false);
+    $name = $request->input('name', false);
+    $description = $request->input('description', false);
     if($markdown) $modifyDate['markdown'] = $markdown;
     if($isPublic) $modifyDate['is_public'] = ($isPublic == 'public') ? true : false;
+    if($name) $modifyDate['name'] = $name;
+    if($description) $modifyDate['description'] = $description;
     return array($modifyDate,$book->update($modifyDate));
 })->name('UpdateBook');
 
-
+Route::delete('/book/{id}', function($id){
+    $book = Book::find($id);
+    if($book->user_id != Auth::id())return abort(404);
+    if($book->delete()){
+        return Response::make("", 204);
+    }else{
+        return abort(404);
+    }
+    
+})->name('GetBook');

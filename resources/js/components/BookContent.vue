@@ -1,15 +1,22 @@
 <template>
     <div id="bootCentent">
         <div class="row">
-                <div class="col-md-3 embed-responsive embed-responsive-16by9">
-                    <div class="scoll embed-responsive-item">
-                        <b-button @click="switchEditable">{{ (editable) ? 'Editing' : 'Edit' }}</b-button>
-                        <b-dropdown id="ddown-header" :text="(isPublic) ? 'Public' : 'Private'" class="m-2" style="z-index: 1501;">
-                            <b-dropdown-item-button @click="setPublic(true)">Public</b-dropdown-item-button>
-                            <b-dropdown-item-button @click="setPublic(false)">Private</b-dropdown-item-button>
-                        </b-dropdown>
-                        <a v-if="isPublic" class="btn" :href="publicLink" target="_blank">Public Link</a>
-                        
+                <div v-if="!fullMode" class="col-md-3 embed-responsive embed-responsive-16by9">
+                    <div class="scrollbar embed-responsive-item" id="style-10">
+                        <div class="action">
+                            <Button @click="switchEditable" icon="ios-download-outline" type="primary">{{ (editable) ? 'Save & Exit' : 'Edit' }}</Button>
+                            <Dropdown @on-click="setPublic" style="margin-left: 10px;">
+                                <Button type="primary">
+                                    {{ (isPublic) ? 'Public' : 'Private' }}
+                                    <Icon type="ios-arrow-down"></Icon>
+                                </Button>
+                                <DropdownMenu slot="list">
+                                    <DropdownItem name="public">Public</DropdownItem>
+                                    <DropdownItem name="private">Private</DropdownItem>
+                                </DropdownMenu>
+                            </Dropdown>
+                            <a v-if="isPublic" class="btn" :href="publicLink" target="_blank">Public Link</a>
+                        </div>
                         <mavon-editor :toolbarsFlag="false"
                                     :language="language"
                                     :subfield=false
@@ -19,41 +26,33 @@
                     </div>
             </div>
 
-            <div class="col-md-9">
-                <b-alert :show="dismissCountDown"
-                        dismissible
-                        fade
-                        @dismissed="dismissCountDown=0"
-                        @dismiss-count-down="countDownChanged">
-                Update successful {{dismissCountDown}} seconds...
-                </b-alert>
-                <mavon-editor @save="updateMarkdown" 
-                              v-if="editable" 
-                              :language="language" 
-                              :defaultOpen="'edit'"
-                              v-model="markdown"/>
-                <div v-show="!editable" class="book-container embed-responsive embed-responsive-16by9">
-                <iframe ref="codimdIframe" class="embed-responsive-item" id="iframe" name="iframe1" width="100%"  src="https://codimd.promise.com.tw"></iframe>
+            <div :class="{'col-md-9': !fullMode, 'col-md-12': fullMode}" class="embed-responsive embed-responsive-16by9">
+                <div class="book-container embed-responsive-item">
+                    <mavon-editor @save="updateMarkdown" 
+                                v-if="editable" 
+                                :language="language" 
+                                :defaultOpen="'edit'"
+                                :s_edit="true"
+                                v-model="markdown"
+                                />
+                    <iframe v-show="!editable" ref="codimdIframe" class="embed-responsive-item" id="codimdIframe" name="codimdIframe" width="100%"  src="https://codimd.promise.com.tw"></iframe>
                 </div>
             </div>
         </div>
+        <Affix :offset-bottom="5">
+            <span><i-switch v-model="fullMode" /></span>
+        </Affix>
     </div>    
 </template>
 
 <script>
 window.Vue = require('vue');
 import mavonEditor from 'mavon-editor'
-import BootstrapVue from 'bootstrap-vue';
 import 'mavon-editor/dist/css/index.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
 Vue.use(mavonEditor);
-Vue.use(BootstrapVue);
 export default{
     mounted(){
         this.getBook();
-       // axios.get('https://codimd.promise.com.tw/history').then(function(res){
-      //      console.log(res);
-       // });
     },
     data(){
         return {
@@ -64,6 +63,7 @@ export default{
             dismissSecs: 5,
             dismissCountDown: 0,
             showDismissibleAlert: false,
+            fullMode: false
         }
     },
     methods:{
@@ -71,32 +71,28 @@ export default{
             axios.get('/book/' + this.$route.params.id).then(
                 (res) => {
                     this.markdown = (res.data.markdown) ? res.data.markdown :　'';
-                    console.log(res.data);
                     this.isPublic = res.data.is_public;
                 }
-            ).catch((res)=>{
-                this.markdown = 'Not Found or No Permission';
-            })
+            ).catch(res=>this.markdown = 'Not Found or No Permission')
         },
         setPublic(isPublic){
-            axios.put('/book/'+ this.$route.params.id, {isPublic: isPublic ? 'public' : 'private'}).then(
-                (res) => {
-                    this.isPublic = isPublic;
-                    this.showAlert()
+            axios.put('/book/'+ this.$route.params.id, {isPublic: isPublic}).then(
+                res => {
+                    this.isPublic = (isPublic == 'public')? true : false ;
                 }
             )            
         },
-        switchEditable () {this.editable = !this.editable},
+        switchEditable () {
+            if(this.editable)this.updateMarkdown();
+            this.editable = !this.editable
+        },
         updateMarkdown(){
             axios.put('/book/'+ this.$route.params.id, {markdown: this.markdown}).then(
-                (res) => this.showAlert()
+                res => this.$Message.success('Update successful')
             )
         },
-        countDownChanged (dismissCountDown) {
-            this.dismissCountDown = dismissCountDown
-        },
-        showAlert () {
-            this.dismissCountDown = this.dismissSecs
+        switchMode(){
+            this.fullMode = !this.fullMode;
         }
     },
     computed:{
@@ -108,7 +104,47 @@ export default{
 </script>
 
 <style>
-.scoll {
-    overflow-y:scroll
+.action {
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+.ivu-affix{
+    z-index: 3000;
+}
+.scrollbar
+{
+	float: left;
+	
+	overflow-y: scroll;
+	margin-bottom: 25px;
+}
+#style-10::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: #F5F5F5;
+	border-radius: 10px;
+}
+
+#style-10::-webkit-scrollbar
+{
+	width: 10px;
+	background-color: #F5F5F5;
+}
+
+#style-10::-webkit-scrollbar-thumb
+{
+	background-color: #AAA;
+	border-radius: 10px;
+	background-image: -webkit-linear-gradient(90deg,
+	                                          rgba(0, 0, 0, .2) 25%,
+											  transparent 25%,
+											  transparent 50%,
+											  rgba(0, 0, 0, .2) 50%,
+											  rgba(0, 0, 0, .2) 75%,
+											  transparent 75%,
+											  transparent)
+}
+.ivu-select-dropdown{
+    z-index:2000;
 }
 </style>

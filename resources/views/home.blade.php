@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container-fluid">
-<router-view></router-view>
+    <router-view></router-view>
     <div class="row justify-content-center">
         
         <!--
