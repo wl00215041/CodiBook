@@ -1,45 +1,42 @@
 <template>
     <div id="bootCentent">
         <div class="row">
-                <div v-if="!fullMode" class="col-md-3 embed-responsive embed-responsive-16by9">
-                    <div class="scrollbar embed-responsive-item" id="style-10">
-                        <div class="action">
-                            <Button @click="switchEditable" icon="ios-download-outline" type="primary">{{ (editable) ? 'Save & Exit' : 'Edit' }}</Button>
-                            <Dropdown @on-click="setPublic" style="margin-left: 10px;">
-                                <Button type="primary">
-                                    {{ (isPublic) ? 'Public' : 'Private' }}
-                                    <Icon type="ios-arrow-down"></Icon>
-                                </Button>
-                                <DropdownMenu slot="list">
-                                    <DropdownItem name="public">Public</DropdownItem>
-                                    <DropdownItem name="private">Private</DropdownItem>
-                                </DropdownMenu>
-                            </Dropdown>
-                            <a v-if="isPublic" class="btn" :href="publicLink" target="_blank">Public Link</a>
-                        </div>
-                        <mavon-editor :toolbarsFlag="false"
-                                    :language="language"
-                                    :subfield=false
-                                    :defaultOpen="'preview'"
-                                    :boxShadow=false
-                                    v-model="markdown"/>
+            <div class="col-md-3 scrollbar embed-responsive embed-responsive-16by9" id="style-10" v-if="!fullMode">
+                <div class="embed-responsive-item">
+                    <div class="action">
+                        <Button @click="switchEditable" icon="ios-download-outline" type="primary">{{ (editable) ? 'Save & Exit' : 'Edit' }}</Button>
+                        <Dropdown @on-click="setPublic" style="margin-left: 10px;">
+                            <Button type="primary">
+                                {{ (isPublic) ? 'Public' : 'Private' }}
+                                <Icon type="ios-arrow-down"></Icon>
+                            </Button>
+                            <DropdownMenu slot="list">
+                                <DropdownItem name="public">Public</DropdownItem>
+                                <DropdownItem name="private">Private</DropdownItem>
+                            </DropdownMenu>
+                        </Dropdown>
+                        <a v-if="isPublic" class="btn" :href="publicLink" target="_blank">Public Link</a>
                     </div>
-            </div>
-
-            <div :class="{'col-md-9': !fullMode, 'col-md-12': fullMode}" class="embed-responsive embed-responsive-16by9">
-                <div class="book-container embed-responsive-item">
-                    <mavon-editor @save="updateMarkdown" 
-                                v-if="editable" 
-                                :language="language" 
-                                :defaultOpen="'edit'"
-                                :s_edit="true"
-                                v-model="markdown"
-                                />
-                    <iframe v-show="!editable" ref="codimdIframe" class="embed-responsive-item" id="codimdIframe" name="codimdIframe" width="100%"  src="https://codimd.promise.com.tw"></iframe>
+                    <mavon-editor :toolbarsFlag="false"
+                                :language="language"
+                                :subfield=false
+                                :defaultOpen="'preview'"
+                                :boxShadow=false
+                                v-model="markdown"/>
                 </div>
             </div>
+            <div :class="{'col-md-9': !fullMode, 'col-md-12': fullMode}" class="embed-responsive embed-responsive-16by9">
+                <mavon-editor @save="updateMarkdown" 
+                            v-if="editable" 
+                            :language="language" 
+                            :defaultOpen="'edit'"
+                            :s_edit="true"
+                            v-model="markdown"
+                            />
+                <iframe v-show="!editable" class="embed-responsive-item" ref="codimdIframe" id="codimdIframe" name="codimdIframe" width="90%"  src="https://codimd.promise.com.tw"></iframe>
+            </div>
         </div>
-        <Affix :offset-bottom="5">
+        <Affix v-if="false" :offset-bottom="5">
             <span><i-switch v-model="fullMode" /></span>
         </Affix>
     </div>    
@@ -68,7 +65,7 @@ export default{
     },
     methods:{
         getBook(){
-            axios.get('/book/' + this.$route.params.id).then(
+            axios.get('/books/' + this.$route.params.id).then(
                 (res) => {
                     this.markdown = (res.data.markdown) ? res.data.markdown :　'';
                     this.isPublic = res.data.is_public;
@@ -76,7 +73,7 @@ export default{
             ).catch(res=>this.markdown = 'Not Found or No Permission')
         },
         setPublic(isPublic){
-            axios.put('/book/'+ this.$route.params.id, {isPublic: isPublic}).then(
+            axios.put('/books/'+ this.$route.params.id, {isPublic: isPublic}).then(
                 res => {
                     this.isPublic = (isPublic == 'public')? true : false ;
                 }
@@ -87,7 +84,7 @@ export default{
             this.editable = !this.editable
         },
         updateMarkdown(){
-            axios.put('/book/'+ this.$route.params.id, {markdown: this.markdown}).then(
+            axios.put('/books/'+ this.$route.params.id, {markdown: this.markdown}).then(
                 res => this.$Message.success('Update successful')
             )
         },
@@ -108,13 +105,9 @@ export default{
     margin-left: 10px;
     margin-bottom: 10px;
 }
-.ivu-affix{
-    z-index: 3000;
-}
 .scrollbar
 {
 	float: left;
-	
 	overflow-y: scroll;
 	margin-bottom: 25px;
 }

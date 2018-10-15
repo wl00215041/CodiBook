@@ -3,7 +3,6 @@ use App\User;
 use App\Book;
 use App\Note;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Resources\Books as BookResource;
 use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
@@ -24,48 +23,4 @@ Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
 
-Route::get('/books', function () {
-    return !Auth::check() ? abort(404) : User::find(Auth::id())->books;
-})->name('Books');
-
-Route::post('/books', function (Request $request) {
-    return User::find(Auth::id())->books()->create(
-        [
-            'name'=> $request->input('name'),
-            'description'=> $request->input('description','')
-        ]
-    );
-})->name('CreateBook');
-
-Route::get('/book/{id}', function($id){
-    $book = Book::find($id);
-    if((Auth::user() && $book->user_id == Auth::id()) || $book->is_public)
-        return $book;
-    return abort(404);
-})->name('GetBook');
-
-Route::put('/book/{id}', function($id, Request $request){
-    $book = Book::find($id);
-    if($book->user_id != Auth::id())return abort(404);
-    $modifyDate = array();
-    $markdown = $request->input('markdown', false);
-    $isPublic = $request->input('isPublic', false);
-    $name = $request->input('name', false);
-    $description = $request->input('description', false);
-    if($markdown) $modifyDate['markdown'] = $markdown;
-    if($isPublic) $modifyDate['is_public'] = ($isPublic == 'public') ? true : false;
-    if($name) $modifyDate['name'] = $name;
-    if($description) $modifyDate['description'] = $description;
-    return array($modifyDate,$book->update($modifyDate));
-})->name('UpdateBook');
-
-Route::delete('/book/{id}', function($id){
-    $book = Book::find($id);
-    if($book->user_id != Auth::id())return abort(404);
-    if($book->delete()){
-        return Response::make("", 204);
-    }else{
-        return abort(404);
-    }
-    
-})->name('GetBook');
+Route::resource('books', 'BookController');

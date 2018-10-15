@@ -32,4 +32,7 @@ class User extends Authenticatable
         return $this->hasMany('App\Book');
     }
 
+    public function mindmaps(){
+        return $this->hasMany('App\MindMap');
+    }
 }

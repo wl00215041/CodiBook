@@ -3,6 +3,7 @@ import BookContent from './components/BookContent.vue';
 import CreateBook from './components/form/CreateBook.vue'
 import EditBook from './components/form/EditBook.vue'
 import PublicBookContent from './components/PublicBookContent.vue'
+import MindMap from './components/MindMap.vue'
 const routes = [
         {
             path: '/',
@@ -28,6 +29,11 @@ const routes = [
             path: '/public/book/:id',
             name: 'publicBook',
             component: PublicBookContent
+        },
+        {
+            path: '/mindmap',
+            name: 'mindmap',
+            component: MindMap
         }
 
     ]

@@ -22,14 +22,14 @@
         },
         methods: {
             getBook(){
-                axios.get('/book/' + this.$route.params.id).then(
+                axios.get('/books/' + this.$route.params.id).then(
                     (book) => {
                         this.books.push(book.data);
                     }
                 ).catch(res=>this.markdown = 'Not Found or No Permission')
             },
             submit(card) {
-                axios.put('/book/' + this.$route.params.id, {name: card.name, description: card.description}).then(
+                axios.put('/books/' + this.$route.params.id, {name: card.name, description: card.description}).then(
                     res => this.$router.push({ path: '/' })
                 ).catch(
                     error => alert(error)
