@@ -6,6 +6,7 @@ use App\Book;
 use App\Note;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class BookController extends Controller
 {
@@ -26,12 +27,7 @@ class BookController extends Controller
      */
     public function create(Request $request)
     {
-        return User::find(Auth::id())->books()->create(
-            [
-                'name'=> $request->input('name'),
-                'description'=> $request->input('description','')
-            ]
-        );
+
     }
 
     /**
@@ -42,7 +38,12 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-
+        return User::find(Auth::id())->books()->create(
+            [
+                'name'=> $request->input('name'),
+                'description'=> $request->input('description','')
+            ]
+        );
     }
 
     /**
@@ -81,16 +82,8 @@ class BookController extends Controller
     {
         $book = Book::find($id);
         if($book->user_id != Auth::id())return abort(404);
-        $modifyDate = array();
-        $markdown = $request->input('markdown', false);
-        $isPublic = $request->input('isPublic', false);
-        $name = $request->input('name', false);
-        $description = $request->input('description', false);
-        if($markdown) $modifyDate['markdown'] = $markdown;
-        if($isPublic) $modifyDate['is_public'] = ($isPublic == 'public') ? true : false;
-        if($name) $modifyDate['name'] = $name;
-        if($description) $modifyDate['description'] = $description;
-        return array($modifyDate,$book->update($modifyDate));
+        $data = $request->input('data', false);
+        return array($book->update($data));
     }
 
     /**
@@ -104,7 +97,7 @@ class BookController extends Controller
         $book = Book::find($id);
         if($book->user_id != Auth::id())return abort(404);
         if($book->delete()){
-            return Response::make("", 204);
+            return $book->delete();
         }else{
             return abort(404);
         }

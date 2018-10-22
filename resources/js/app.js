@@ -16,6 +16,7 @@ window.Vue = require('vue');
 import VueRouter from 'vue-router';
 import routes from './routes.js';
 import iView from 'iview';
+import store from './store'
 import 'iview/dist/styles/iview.css';
 Vue.component('header-nav', require('./components/Nav.vue'));
 Vue.use(VueRouter);
@@ -27,4 +28,5 @@ const router = new VueRouter({
 const app = new Vue({
     el: '#app',
     router,
+    store
 });

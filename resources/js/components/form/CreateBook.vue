@@ -20,8 +20,19 @@
         },
         methods: {
             submit(card){
+                if(card.type === 'Book') this.createBook(card);
+                else this.createMindMaps(card);
+            },
+            createBook(card){
                 axios.post('/books', {name: card.name, description: card.description}).then(
                     res => this.$router.push({ path: '/' })
+                ).catch(
+                    error => alert(error)
+                )
+            },
+            createMindMaps(card){
+                axios.post('/mindmaps', {name: card.name, description: card.description}).then(
+                    res => this.$router.push({ path: '/mindmap' })
                 ).catch(
                     error => alert(error)
                 )

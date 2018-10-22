@@ -2,16 +2,16 @@
     <div id="nav">
         <Row>
             <Col span="24">
-                <Menu mode="horizontal" :theme="theme1" active-name="1">
-                    <MenuItem name="1" :to="{name: 'home'}">
+                <Menu mode="horizontal" :theme="theme1" :active-name="$router.currentRoute.name">
+                    <MenuItem name="home" :to="{name: 'home'}">
                         <Icon type="ios-paper" />
                         Book
                     </MenuItem>
-                    <MenuItem name="2" :to="{name: 'mindmap'}">
+                    <MenuItem name="mindmapList" :to="{name: 'mindmapList'}">
                         <Icon type="ios-people" />
                         MindMap
                     </MenuItem>
-                    <MenuItem name="3" :to="{ name: 'bookCreate' }">
+                    <MenuItem name="bookCreate" :to="{ name: 'bookCreate' }">
                         <Icon type="ios-paper" />
                         Create
                     </MenuItem>

@@ -23,4 +23,10 @@ Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
 
+
+Route::post('/books', function (Request $request) {
+    
+})->name('CreateBook');
+
 Route::resource('books', 'BookController');
+Route::resource('mindmaps', 'MindMapController');

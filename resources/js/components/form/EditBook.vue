@@ -29,7 +29,13 @@
                 ).catch(res=>this.markdown = 'Not Found or No Permission')
             },
             submit(card) {
-                axios.put('/books/' + this.$route.params.id, {name: card.name, description: card.description}).then(
+                let submitData = {
+                    data: {
+                        name: card.name, 
+                        description: card.description
+                    }
+                }
+                axios.put('/books/' + this.$route.params.id, submitData).then(
                     res => this.$router.push({ path: '/' })
                 ).catch(
                     error => alert(error)

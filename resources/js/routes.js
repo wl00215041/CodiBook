@@ -1,9 +1,10 @@
-import Books from './components/Books.vue';
-import BookContent from './components/BookContent.vue';
+import Books from './modules/book/components/Books.vue';
+import BookContent from './modules/book/components/BookContent.vue';
 import CreateBook from './components/form/CreateBook.vue'
 import EditBook from './components/form/EditBook.vue'
-import PublicBookContent from './components/PublicBookContent.vue'
-import MindMap from './components/MindMap.vue'
+import PublicBookContent from './modules/book/components/PublicBookContent.vue'
+import MindMaps from './modules/mindmap/components/MindMaps.vue'
+import MindMapContent from './modules/mindmap/components/MindMapContent.vue'
 const routes = [
         {
             path: '/',
@@ -32,10 +33,19 @@ const routes = [
         },
         {
             path: '/mindmap',
+            name: 'mindmapList',
+            component: MindMaps
+        },
+        {
+            path: '/mindmap/:id',
             name: 'mindmap',
-            component: MindMap
-        }
-
+            component: MindMapContent
+        },
+        {
+            path: '/mindmap/:id/edit',
+            name: 'mindmapEdit',
+            component: EditBook
+        },        
     ]
 
 export default routes
