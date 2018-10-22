@@ -57,7 +57,9 @@
             <Layout>
                 <Content :style="{padding: '0 16px 16px'}">
                     <fullscreen ref="fullscreen" @change="fullscreenChange">
-                            <div id="jsmind_container"></div>
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <div id="jsmind_container" class="embed-responsive-item"></div>
+                        </div>
                     </fullscreen>
                 </Content>
             </Layout>
@@ -236,7 +238,7 @@ export default {
 </script>
 <style>
     #jsmind_container {
-        height:600px;
+        
         width: 100%;
     }
     .py-4 {

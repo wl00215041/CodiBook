@@ -54069,7 +54069,7 @@ exports = module.exports = __webpack_require__(2)(false);
 
 
 // module
-exports.push([module.i, "\n#jsmind_container {\n    height:600px;\n    width: 100%;\n}\n.py-4 {\n    padding-top: 0rem !important;\n}\n.layout-con{\n    height: 100%;\n    width: 100%;\n}\n.menu-item span{\n    display: inline-block;\n    overflow: hidden;\n    width: 69px;\n    text-overflow: ellipsis;\n    white-space: nowrap;\n    vertical-align: bottom;\n    -webkit-transition: width .2s ease .2s;\n    transition: width .2s ease .2s;\n}\n.menu-item i{\n    -webkit-transform: translateX(0px);\n            transform: translateX(0px);\n    -webkit-transition: font-size .2s ease, -webkit-transform .2s ease;\n    transition: font-size .2s ease, -webkit-transform .2s ease;\n    transition: font-size .2s ease, transform .2s ease;\n    transition: font-size .2s ease, transform .2s ease, -webkit-transform .2s ease;\n    vertical-align: middle;\n    font-size: 16px;\n}\n.collapsed-menu span{\n    width: 0px;\n    -webkit-transition: width .2s ease;\n    transition: width .2s ease;\n}\n.collapsed-menu i{\n    -webkit-transform: translateX(5px);\n            transform: translateX(5px);\n    -webkit-transition: font-size .2s ease .2s, -webkit-transform .2s ease .2s;\n    transition: font-size .2s ease .2s, -webkit-transform .2s ease .2s;\n    transition: font-size .2s ease .2s, transform .2s ease .2s;\n    transition: font-size .2s ease .2s, transform .2s ease .2s, -webkit-transform .2s ease .2s;\n    vertical-align: middle;\n    font-size: 22px;\n}\n.ivu-btn {\n    margin-bottom: 5px;\n}\n", ""]);
+exports.push([module.i, "\n#jsmind_container {\n    \n    width: 100%;\n}\n.py-4 {\n    padding-top: 0rem !important;\n}\n.layout-con{\n    height: 100%;\n    width: 100%;\n}\n.menu-item span{\n    display: inline-block;\n    overflow: hidden;\n    width: 69px;\n    text-overflow: ellipsis;\n    white-space: nowrap;\n    vertical-align: bottom;\n    -webkit-transition: width .2s ease .2s;\n    transition: width .2s ease .2s;\n}\n.menu-item i{\n    -webkit-transform: translateX(0px);\n            transform: translateX(0px);\n    -webkit-transition: font-size .2s ease, -webkit-transform .2s ease;\n    transition: font-size .2s ease, -webkit-transform .2s ease;\n    transition: font-size .2s ease, transform .2s ease;\n    transition: font-size .2s ease, transform .2s ease, -webkit-transform .2s ease;\n    vertical-align: middle;\n    font-size: 16px;\n}\n.collapsed-menu span{\n    width: 0px;\n    -webkit-transition: width .2s ease;\n    transition: width .2s ease;\n}\n.collapsed-menu i{\n    -webkit-transform: translateX(5px);\n            transform: translateX(5px);\n    -webkit-transition: font-size .2s ease .2s, -webkit-transform .2s ease .2s;\n    transition: font-size .2s ease .2s, -webkit-transform .2s ease .2s;\n    transition: font-size .2s ease .2s, transform .2s ease .2s;\n    transition: font-size .2s ease .2s, transform .2s ease .2s, -webkit-transform .2s ease .2s;\n    vertical-align: middle;\n    font-size: 22px;\n}\n.ivu-btn {\n    margin-bottom: 5px;\n}\n", ""]);
 
 // exports
 
@@ -54088,6 +54088,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vue_fullscreen___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_vue_fullscreen__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_vue__);
+//
+//
 //
 //
 //
@@ -58797,7 +58799,20 @@ var render = function() {
                   _c(
                     "fullscreen",
                     { ref: "fullscreen", on: { change: _vm.fullscreenChange } },
-                    [_c("div", { attrs: { id: "jsmind_container" } })]
+                    [
+                      _c(
+                        "div",
+                        {
+                          staticClass: "embed-responsive embed-responsive-16by9"
+                        },
+                        [
+                          _c("div", {
+                            staticClass: "embed-responsive-item",
+                            attrs: { id: "jsmind_container" }
+                          })
+                        ]
+                      )
+                    ]
                   )
                 ],
                 1
