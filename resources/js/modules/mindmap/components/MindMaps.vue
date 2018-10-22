@@ -40,6 +40,7 @@ export default {
     methods: {
         showTips(){
             if(this.mindmaps.length == 0){
+                    this.$Notice.config({top:80});
                     this.$Notice.info({
                         title: 'Notification',
                         desc: 'Welcome to use CodiBook, Now you can add a new Book.'

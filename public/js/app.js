@@ -51834,6 +51834,7 @@ Vue.component('book-card', __webpack_require__(53));
     methods: {
         showTips: function showTips() {
             if (this.books.length == 0) {
+                this.$Notice.config({ top: 80 });
                 this.$Notice.info({
                     title: 'Notification',
                     desc: 'Welcome to use CodiBook, Now you can add a new Book.'
@@ -53619,6 +53620,7 @@ Vue.component('mind-map-card', __webpack_require__(88));
     methods: {
         showTips: function showTips() {
             if (this.mindmaps.length == 0) {
+                this.$Notice.config({ top: 80 });
                 this.$Notice.info({
                     title: 'Notification',
                     desc: 'Welcome to use CodiBook, Now you can add a new Book.'
