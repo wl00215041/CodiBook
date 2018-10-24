@@ -54071,7 +54071,7 @@ exports = module.exports = __webpack_require__(2)(false);
 
 
 // module
-exports.push([module.i, "\n#jsmind_container {\n    \n    width: 100%;\n}\n.py-4 {\n    padding-top: 0rem !important;\n}\n.layout-con{\n    height: 100%;\n    width: 100%;\n}\n.menu-item span{\n    display: inline-block;\n    overflow: hidden;\n    width: 69px;\n    text-overflow: ellipsis;\n    white-space: nowrap;\n    vertical-align: bottom;\n    -webkit-transition: width .2s ease .2s;\n    transition: width .2s ease .2s;\n}\n.menu-item i{\n    -webkit-transform: translateX(0px);\n            transform: translateX(0px);\n    -webkit-transition: font-size .2s ease, -webkit-transform .2s ease;\n    transition: font-size .2s ease, -webkit-transform .2s ease;\n    transition: font-size .2s ease, transform .2s ease;\n    transition: font-size .2s ease, transform .2s ease, -webkit-transform .2s ease;\n    vertical-align: middle;\n    font-size: 16px;\n}\n.collapsed-menu span{\n    width: 0px;\n    -webkit-transition: width .2s ease;\n    transition: width .2s ease;\n}\n.collapsed-menu i{\n    -webkit-transform: translateX(5px);\n            transform: translateX(5px);\n    -webkit-transition: font-size .2s ease .2s, -webkit-transform .2s ease .2s;\n    transition: font-size .2s ease .2s, -webkit-transform .2s ease .2s;\n    transition: font-size .2s ease .2s, transform .2s ease .2s;\n    transition: font-size .2s ease .2s, transform .2s ease .2s, -webkit-transform .2s ease .2s;\n    vertical-align: middle;\n    font-size: 22px;\n}\n.ivu-btn {\n    margin-bottom: 5px;\n}\n", ""]);
+exports.push([module.i, "\n#jsmind_container {\n    width: 100%;\n}\n.py-4 {\n    padding-top: 0rem !important;\n}\n.layout-con{\n    height: 100%;\n    width: 100%;\n}\n.menu-item span{\n    display: inline-block;\n    overflow: hidden;\n    width: 69px;\n    text-overflow: ellipsis;\n    white-space: nowrap;\n    vertical-align: bottom;\n    -webkit-transition: width .2s ease .2s;\n    transition: width .2s ease .2s;\n}\n.menu-item i{\n    -webkit-transform: translateX(0px);\n            transform: translateX(0px);\n    -webkit-transition: font-size .2s ease, -webkit-transform .2s ease;\n    transition: font-size .2s ease, -webkit-transform .2s ease;\n    transition: font-size .2s ease, transform .2s ease;\n    transition: font-size .2s ease, transform .2s ease, -webkit-transform .2s ease;\n    vertical-align: middle;\n    font-size: 16px;\n}\n.collapsed-menu span{\n    width: 0px;\n    -webkit-transition: width .2s ease;\n    transition: width .2s ease;\n}\n.collapsed-menu i{\n    -webkit-transform: translateX(5px);\n            transform: translateX(5px);\n    -webkit-transition: font-size .2s ease .2s, -webkit-transform .2s ease .2s;\n    transition: font-size .2s ease .2s, -webkit-transform .2s ease .2s;\n    transition: font-size .2s ease .2s, transform .2s ease .2s;\n    transition: font-size .2s ease .2s, transform .2s ease .2s, -webkit-transform .2s ease .2s;\n    vertical-align: middle;\n    font-size: 22px;\n}\n.ivu-btn {\n    margin-bottom: 5px;\n}\n", ""]);
 
 // exports
 
@@ -54158,9 +54158,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
-//
 
 
 
@@ -54172,6 +54169,8 @@ __webpack_require__(102);
 __WEBPACK_IMPORTED_MODULE_3_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_vue_fullscreen___default.a);
 /* harmony default export */ __webpack_exports__["default"] = ({
     mounted: function mounted() {
+        var _this = this;
+
         var options = {
             container: 'jsmind_container',
             theme: 'orange',
@@ -54179,6 +54178,12 @@ __WEBPACK_IMPORTED_MODULE_3_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_vue_
         };
         this.mind = new __WEBPACK_IMPORTED_MODULE_1_jsmind___default.a(options);
         this.getMindMap();
+        this.windowHeight = window.innerHeight;
+        this.$nextTick(function () {
+            window.addEventListener('resize', function () {
+                _this.windowHeight = window.innerHeight;
+            });
+        });
     },
     data: function data() {
         return {
@@ -54188,7 +54193,8 @@ __WEBPACK_IMPORTED_MODULE_3_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_vue_
             isCollapsed: false,
             file: null,
             handleUploaded: false,
-            fullscreen: false
+            fullscreen: false,
+            windowHeight: 0
         };
     },
 
@@ -54199,13 +54205,13 @@ __WEBPACK_IMPORTED_MODULE_3_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_vue_
             return this.handleUploaded;
         },
         getMindMap: function getMindMap() {
-            var _this = this;
+            var _this2 = this;
 
             axios.get('/mindmaps/' + this.$route.params.id).then(function (res) {
-                _this.data = res.data;
-                _this.mind.show(__WEBPACK_IMPORTED_MODULE_1_jsmind___default.a.util.json.string2json(res.data.mindmap));
+                _this2.data = res.data;
+                _this2.mind.show(__WEBPACK_IMPORTED_MODULE_1_jsmind___default.a.util.json.string2json(res.data.mindmap));
             }).catch(function (res) {
-                return _this.mindmap = 'Not Found or No Permission';
+                return _this2.mindmap = 'Not Found or No Permission';
             });
         },
         addNode: function addNode() {
@@ -54220,7 +54226,7 @@ __WEBPACK_IMPORTED_MODULE_3_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_vue_
             this.mind.remove_node(this.selectedNode.id);
         },
         save: function save() {
-            var _this2 = this;
+            var _this3 = this;
 
             var submitData = {
                 data: {
@@ -54228,7 +54234,7 @@ __WEBPACK_IMPORTED_MODULE_3_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_vue_
                 }
             };
             axios.put('/mindmaps/' + this.$route.params.id, submitData).then(function (res) {
-                return _this2.$Message.success('Update successful');
+                return _this3.$Message.success('Update successful');
             });
         },
         download: function download() {
@@ -54261,7 +54267,7 @@ __WEBPACK_IMPORTED_MODULE_3_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_vue_
             };
         },
         loadFreeMind: function loadFreeMind() {
-            var _this3 = this;
+            var _this4 = this;
 
             __WEBPACK_IMPORTED_MODULE_1_jsmind___default.a.util.file.read(this.file, function (freemind_data, freemind_name) {
                 if (freemind_data) {
@@ -54278,7 +54284,7 @@ __WEBPACK_IMPORTED_MODULE_3_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_2_vue_
                         "format": "freemind",
                         "data": freemind_data
                     };
-                    _this3.mind.show(option);
+                    _this4.mind.show(option);
                 } else {
                     prompt_info('can not open this file as mindmap');
                 }
@@ -58562,13 +58568,15 @@ var render = function() {
     [
       _c(
         "Layout",
-        { style: { minHeight: "85vh" } },
         [
           _c(
             "Sider",
             {
-              style: { textAlign: "center" },
-              attrs: { collapsible: "", "collapsed-width": 78 },
+              staticStyle: { "overflow-y": "auto" },
+              style: {
+                textAlign: "center",
+                height: _vm.windowHeight - 85 + "px"
+              },
               model: {
                 value: _vm.isCollapsed,
                 callback: function($$v) {
@@ -58586,21 +58594,19 @@ var render = function() {
               _vm._v(" "),
               _c("Button", { on: { click: _vm.save } }, [_vm._v("Save")]),
               _vm._v(" "),
-              _c("Divider", [_vm._v("Node")]),
-              _vm._v(" "),
-              _c("Button", { on: { click: _vm.addNode } }, [
-                _vm._v("Add a child node")
-              ]),
-              _vm._v(" "),
-              _c("Button", { on: { click: _vm.removeNode } }, [
-                _vm._v("Remove Node")
-              ]),
-              _vm._v(" "),
               _vm.selectedNode
                 ? _c(
                     "div",
                     [
                       _c("Divider", [_vm._v("Selected Node")]),
+                      _vm._v(" "),
+                      _c("Button", { on: { click: _vm.addNode } }, [
+                        _vm._v("Add a child node")
+                      ]),
+                      _vm._v(" "),
+                      _c("Button", { on: { click: _vm.removeNode } }, [
+                        _vm._v("Remove Node")
+                      ]),
                       _vm._v(" "),
                       _c(
                         "div",
@@ -58802,18 +58808,10 @@ var render = function() {
                     "fullscreen",
                     { ref: "fullscreen", on: { change: _vm.fullscreenChange } },
                     [
-                      _c(
-                        "div",
-                        {
-                          staticClass: "embed-responsive embed-responsive-16by9"
-                        },
-                        [
-                          _c("div", {
-                            staticClass: "embed-responsive-item",
-                            attrs: { id: "jsmind_container" }
-                          })
-                        ]
-                      )
+                      _c("div", {
+                        style: { height: _vm.windowHeight - 85 + "px" },
+                        attrs: { id: "jsmind_container" }
+                      })
                     ]
                   )
                 ],

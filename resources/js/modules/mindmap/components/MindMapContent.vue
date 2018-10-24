@@ -1,15 +1,14 @@
 <template>
     <div>
-        <Layout :style="{minHeight: '85vh'}">
-            <Sider :style="{textAlign: 'center'}" collapsible :collapsed-width="78" v-model="isCollapsed">
+        <Layout >
+            <Sider style="overflow-y:auto;" :style="{textAlign: 'center', height: (windowHeight-85) + 'px'}" v-model="isCollapsed">
                 <span style="color:white">MindMap: {{ data.name }}</span>
                 <Divider>Operate</Divider>
                 <Button @click="save">Save</Button>
-                <Divider>Node</Divider>
-                <Button @click="addNode">Add a child node</Button>
-                <Button @click="removeNode">Remove Node</Button>
                 <div v-if="selectedNode">
-                <Divider>Selected Node</Divider>
+                    <Divider>Selected Node</Divider>
+                    <Button @click="addNode">Add a child node</Button>
+                    <Button @click="removeNode">Remove Node</Button>
                     <div style="color:white;">
                         <Col  span="12">
                             Background
@@ -57,9 +56,7 @@
             <Layout>
                 <Content :style="{padding: '0 16px 16px'}">
                     <fullscreen ref="fullscreen" @change="fullscreenChange">
-                        <div class="embed-responsive embed-responsive-16by9">
-                            <div id="jsmind_container" class="embed-responsive-item"></div>
-                        </div>
+                            <div id="jsmind_container" :style="{height: (windowHeight-85) + 'px'}"></div>
                     </fullscreen>
                 </Content>
             </Layout>
@@ -87,6 +84,10 @@ export default {
         };
         this.mind = new jsMind(options);
         this.getMindMap();
+        this.windowHeight = window.innerHeight;
+        this.$nextTick(()=>{
+            window.addEventListener('resize', ()=>{this.windowHeight = window.innerHeight;});
+        })
     },
     data(){
         return {
@@ -96,7 +97,8 @@ export default {
             isCollapsed: false,
             file: null,
             handleUploaded: false,
-            fullscreen: false
+            fullscreen: false,
+            windowHeight: 0
         }
     },
     methods: {
@@ -232,13 +234,12 @@ export default {
         tmpNode: {
             backgrounColor: 'setColor',
             foregroundColor: 'this.setColor'
-        }
+        },
     }
 }
 </script>
 <style>
     #jsmind_container {
-        
         width: 100%;
     }
     .py-4 {
