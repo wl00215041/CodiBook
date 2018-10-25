@@ -8,3 +8,9 @@ pipeline:
     password: Promise123!
     dockerfile: Dockerfile
     auto_tag: true
+  clair:
+    image: jmccann/drone-clair:1
+    url: http://dhub.promise.com.tw
+    username: cibot
+    password: Promise123!
+    scan_image: dhub.promise.com.tw:5000/applications/codibook
