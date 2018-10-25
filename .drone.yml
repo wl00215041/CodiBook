@@ -1,8 +1,10 @@
 pipeline:
   docker:
     image: plugins/docker
-    registry: 10.90.1.2:5100
-    repo: 10.90.1.2:5100/promise/codibook
+    registry: dhub.promise.com.tw:5000
+    repo: dhub.promise.com.tw:5000/applications/codibook
     insecure: true
+    username: cibot
+    password: Promise123!
     dockerfile: Dockerfile
     auto_tag: true
