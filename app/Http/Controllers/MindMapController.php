@@ -95,7 +95,6 @@ class MindMapController extends Controller
     {
         
         $mindmap = MindMap::find($id);
-        var_dump($id);
         if($mindmap->user_id != Auth::id())return abort(404);
         if($mindmap->delete()){
             return $mindmap->delete();

@@ -11,6 +11,7 @@ class MindMap extends Model
         'name',
         'description',
         'mindmap',
+        'style',
         'is_public'
     ];
     public function user()
