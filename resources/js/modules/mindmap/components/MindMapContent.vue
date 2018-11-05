@@ -1,58 +1,67 @@
 <template>
     <div>
         <Layout >
-            <Sider style="overflow-y:auto;" :style="{textAlign: 'center', height: (windowHeight-85) + 'px'}" v-model="isCollapsed">
-                <span style="color:white">MindMap: {{ data.name }}</span>
-                <Divider>Operate</Divider>
-                <Button @click="save">Save</Button>
-                <div v-if="selectedNode">
-                    <Divider>Selected Node</Divider>
-                    <Button @click="addNode">Add a child node</Button>
-                    <Button @click="removeNode">Remove Node</Button>
-                    <div style="color:white;">
-                        <Col  span="12">
-                            Background
-                            <ColorPicker v-model="selectedNodeBackgroundColor" />
-                        </Col>
-                        <Col span="12">
-                            Text Color
-                            <ColorPicker v-model="selectedNodeForegroundColor" />
-                        </Col>
-                    </div>
-                </div>
-                <Divider>MindMap</Divider>
-                <Upload action="#" :before-upload="handleUpload">
-                    <Button icon="ios-cloud-upload-outline">Load MindMap (.mm)</Button>
-                </Upload>
-                <Button @click="download">Download (.mm)</Button>
-                <Divider>Style</Divider>
-                <select v-model="style">
-                    <option value="">default</option>
-                    <option value="primary">primary</option>
-                    <option value="warning">warning</option>
-                    <option value="danger">danger</option>
-                    <option value="success">success</option>
-                    <option value="info">info</option>
-                    <option value="greensea" selected="selected">greensea</option>
-                    <option value="nephrite">nephrite</option>
-                    <option value="belizehole">belizehole</option>
-                    <option value="wisteria">wisteria</option>
-                    <option value="asphalt">asphalt</option>
-                    <option value="orange">orange</option>
-                    <option value="pumpkin">pumpkin</option>
-                    <option value="pomegranate">pomegranate</option>
-                    <option value="clouds">clouds</option>
-                    <option value="asbestos">asbestos</option>
-                </select>
-                <Divider>View</Divider>
-                <Button @click="zoomIn">Zoom In</Button>
-                <Button @click="zoomOut">Zoom Out</Button>
-                <br>
-                <Button @click="toggle">Full screen</Button>
-                <Button @click="exportImage">ScreenShot</Button>
-                <br>
-                <Button @click="resize">Resize</Button>
-            </Sider>
+            <Layout >
+            <div id="toolBar">
+                <Tooltip content="Load .mm file">
+                    <Upload action="#" :before-upload="handleUpload">
+                        <Button><font-awesome icon="folder-open" /></Button>
+                    </Upload>
+                </Tooltip>
+                <Tooltip content="Save">
+                    <Button @click="save"><font-awesome icon="save" /></Button>
+                </Tooltip>
+                |
+                <template v-if="selectedNode">
+                    <Tooltip content="Add a child node">
+                        <Button @click="addNode"><font-awesome icon="plus" /></Button>
+                    </Tooltip>
+                    <Tooltip content="Remove selected node">
+                        <Button @click="removeNode"><font-awesome icon="minus" /></Button>
+                    </Tooltip>
+                    |
+                    <Tooltip content="Move selected node to first">
+                        <Button @click="moveToFist"><font-awesome icon="angle-double-up" /></Button>
+                    </Tooltip>
+                    <Tooltip content="Move selected node to last">
+                        <Button @click="moveToLast"><font-awesome icon="angle-double-down" /></Button>
+                    </Tooltip>|
+                    <Tooltip content="Choose Node background color">
+                        <ColorPicker v-model="selectedNodeBackgroundColor" />
+                    </Tooltip>
+                    <Tooltip content="Choose font color">
+                        <ColorPicker v-model="selectedNodeForegroundColor" />
+                    </Tooltip>
+                </template>
+                <Tooltip content="Zoom In">
+                    <Button @click="zoomIn"><font-awesome icon="search-plus" /></Button>
+                </Tooltip>
+                <Tooltip content="Zoom Out">
+                    <Button @click="zoomOut"><font-awesome icon="search-minus" /></Button>
+                </Tooltip>|
+                <Tooltip content="Collapse All">
+                    <Button @click="collapseAll"><font-awesome icon="level-down-alt" /></Button>
+                </Tooltip>
+                <Tooltip content="Expand All">
+                    <Button @click="ExpandAll"><font-awesome icon="level-up-alt" /></Button>
+                </Tooltip>|
+                <Tooltip content="Full Screen">
+                    <Button @click="toggle"><font-awesome icon="arrows-alt" /></Button>
+                </Tooltip>
+                <Tooltip content="Download Mindmap as image">
+                    <Button @click="exportImage"><font-awesome icon="camera" /></Button>
+                </Tooltip>
+                <Tooltip content="Download .mm">
+                    <Button @click="download"><font-awesome icon="file-export" /></Button>
+                </Tooltip>
+                <Tooltip content="Choose MindMap theme" placement="top">
+                    <Select v-model="style" style="width:150px">
+                        <Option value="''">default</Option>
+                        <Option v-for="theme in themes" :value="theme" :key="theme">{{ theme }}</Option>
+                    </Select>
+                </Tooltip>
+            </div>
+            </Layout>
             <Layout>
                 <Content :style="{padding: '0 16px 16px'}">
                     <fullscreen ref="fullscreen" @change="fullscreenChange">
@@ -62,18 +71,16 @@
             </Layout>
         </Layout>
     </div>
-
-
-
 </template>
 <script>
 import "jsmind/style/jsmind.css"; 
 import jsMind from "jsmind";
+import fullscreen from 'vue-fullscreen'
+import Vue from 'vue'
 global.jsMind = jsMind
 require('jsmind/js/jsmind.draggable.js');
 require('jsmind/js/jsmind.screenshot.js');
-import fullscreen from 'vue-fullscreen'
-import Vue from 'vue'
+
 Vue.use(fullscreen)
 export default {
     mounted() {
@@ -93,12 +100,28 @@ export default {
         return {
             data: {},
             mind: {},
-            style: '',
             isCollapsed: false,
             file: null,
             handleUploaded: false,
             fullscreen: false,
-            windowHeight: 0
+            windowHeight: 0,
+            themes: [
+                'primary',
+                'warning',
+                'danger',
+                'success',
+                'info',
+                'greensea',
+                'nephrite',
+                'belizehole',
+                'wisteria',
+                'asphalt',
+                'orange',
+                'pumpkin',
+                'pomegranate',
+                'clouds',
+                'asbestos',
+            ]
         }
     },
     methods: {
@@ -110,8 +133,9 @@ export default {
         getMindMap(){
             axios.get('/mindmaps/' + this.$route.params.id).then(
                 (res) => {
-                    this.data = res.data
+                    this.data = res.data;
                     this.mind.show(jsMind.util.json.string2json(res.data.mindmap))
+                    this.setTheme(this.data.style);
                 }
             ).catch(res=>this.mindmap = 'Not Found or No Permission')
         },
@@ -124,10 +148,17 @@ export default {
                 if(!this.selectedNode){prompt_info('please select a node first.');return;}
                 this.mind.remove_node(this.selectedNode.id);
         },
+        moveToFist(){
+            this.mind.move_node(this.selectedNode.id,'_first_');
+        },
+        moveToLast(){
+            this.mind.move_node(this.selectedNode.id,'_last_');
+        },
         save(){
             let submitData = {
                 data: {
-                    mindmap: jsMind.util.json.json2string(this.mind.get_data())
+                    mindmap: jsMind.util.json.json2string(this.mind.get_data()),
+                    style: this.style
                 }
             }
             axios.put('/mindmaps/'+ this.$route.params.id, submitData).then(
@@ -149,18 +180,24 @@ export default {
         resize(){
             this.mind.resize();
         },
+        collapseAll(){
+            this.mind.collapse_all();
+        },
+        ExpandAll(){
+            this.mind.expand_all();
+        },
         zoomIn(){
             if (this.mind.view.zoomIn()) {
-                zoomOutButton.disabled = false;
+                //zoomOutButton.disabled = false;
             } else {
-                zoomInButton.disabled = true;
+                //zoomInButton.disabled = true;
             };
         },
         zoomOut(){
             if (this.mind.view.zoomOut()) {
-                zoomInButton.disabled = false;
+                //zoomInButton.disabled = false;
             } else {
-                zoomOutButton.disabled = true;
+                //zoomOutButton.disabled = true;
             };
         },
         loadFreeMind(){
@@ -215,6 +252,7 @@ export default {
                 return this.selectedNode.data['background-color'] || '';
             },
             set(value){
+                Vue.set(this.selectedNode.data, 'background-color', value);
                 this.mind.set_node_color(this.selectedNode.id, value, this.selectedNodeForegroundColor);
             }
         }
@@ -224,13 +262,22 @@ export default {
                 return this.selectedNode.data['foreground-color'] || '';
             },
             set(value){
+                Vue.set(this.selectedNode.data, 'foreground-color', value);
                 this.mind.set_node_color(this.selectedNode.id, this.selectedNodeBackgroundColor, value);
+            }
+        },
+        style: {
+            get(){
+                return this.data.style;
+            },
+            set(value){
+                this.data.style = value;
+                this.setTheme(value);
             }
         }
         
     },
     watch: {
-        style: 'setTheme',
         tmpNode: {
             backgrounColor: 'setColor',
             foregroundColor: 'this.setColor'
@@ -239,6 +286,16 @@ export default {
 }
 </script>
 <style>
+    .ivu-upload {
+        display: inline-block;
+    }
+    /*按下面内容修改 jsmind.css 里的内容*/
+    /* 16行 */
+    jmnodes > input{min-width:420px !important}
+
+    #toolBar {
+        font-size: 28px;
+    }
     #jsmind_container {
         width: 100%;
     }

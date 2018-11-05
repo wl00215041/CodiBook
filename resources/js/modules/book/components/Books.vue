@@ -1,28 +1,21 @@
 <template>
 <Row>
     <book-card v-for="(book, index) in books" :book="book" :key="index" @delete="onDeleteBook"></book-card>
-    <Modal v-model="modal2" width="360">
-        <p slot="header" style="color:#f60;text-align:center">
-            <Icon type="ios-information-circle"></Icon>
-            <span>Delete confirmation</span>
-        </p>
-        <div style="text-align:center">
-            <p>Will you delete <Tag color="magenta">{{ selectedBook.name }}</Tag> ?</p>
-            <p>Input Book name:<input type="text" v-model="deleteComfirmName"></p>
-        </div>
-        <div slot="footer">
-            <Button type="error" size="large" long :loading="modal_loading" @click="deleteBook">Delete</Button>
-        </div>
-    </Modal>
+    <alert-delete v-model="modal2" :objectName="selectedBook.name" @deleteConfirmed="deleteBook"></alert-delete>
 </Row>
 </template>
 
 <script>
 window.Vue = require('vue');
-Vue.component('book-card', require('./widget/BookCard.vue'));
+import BookCard from './widget/BookCard.vue'
+import AlertDelete from '../../../components/widget/AlertDelete.vue'
 import { mapState, mapActions } from 'vuex'
 
 export default {
+    components: {
+        BookCard,
+        AlertDelete
+    },
     mounted(){
         this.$store.dispatch('books/getList').then(() => this.showTips());
     },
@@ -34,7 +27,6 @@ export default {
             modal2: false,
             modal_loading: false,
             selectedBook: {},
-            deleteComfirmName: ''
         }
     },
     methods: {
@@ -51,22 +43,14 @@ export default {
            this.modal2 = true;
            this.selectedBook = book
         },
-        deleteBook () {
-            if(this.selectedBook.name != this.deleteComfirmName){
-                this.$Message.warning('Incorrect comfirmation Name');
-                return;
-            }
-            this.modal_loading = true;
-
+        deleteBook (confirmed) {
+            if(!confirmed)return;
             this.$store.dispatch('books/deleteBook', this.selectedBook.id).then(
                 ()=> this.$Message.success('Successfully delete')
             ).catch(
                 res => this.$Message.error('Error delete')
             );
-
             this.selectedBook = {};
-            this.deleteComfirmName = '';
-            this.modal_loading = false;
             this.modal2 = false;
         }
     },

@@ -22,7 +22,7 @@
                                 :subfield=false
                                 :defaultOpen="'preview'"
                                 :boxShadow=false
-                                v-model="markdown"/>
+                                v-model="book.markdown"/>
                 </div>
             </div>
             <div :class="{'col-md-9': !fullMode, 'col-md-12': fullMode}" class="embed-responsive embed-responsive-16by9">
@@ -31,7 +31,7 @@
                             :language="language" 
                             :defaultOpen="'edit'"
                             :s_edit="true"
-                            v-model="markdown"
+                            v-model="book.markdown"
                             />
                 <iframe v-show="!editable" class="embed-responsive-item" ref="codimdIframe" id="codimdIframe" name="codimdIframe" width="90%"  src="https://codimd.promise.com.tw"></iframe>
             </div>
@@ -53,10 +53,10 @@ export default{
     },
     data(){
         return {
+            book: {},
             editable: false,
             isPublic: false,
             language: 'en',
-            markdown: '',
             dismissSecs: 5,
             dismissCountDown: 0,
             showDismissibleAlert: false,
@@ -67,13 +67,17 @@ export default{
         getBook(){
             axios.get('/books/' + this.$route.params.id).then(
                 (res) => {
-                    this.markdown = (res.data.markdown) ? res.data.markdown :　'';
+                    this.book = res.data;
                     this.isPublic = res.data.is_public;
                 }
-            ).catch(res=>this.markdown = 'Not Found or No Permission')
+            ).catch(res=>this.book.markdown = 'Not Found or No Permission')
         },
         setPublic(isPublic){
-            axios.put('/books/'+ this.$route.params.id, {isPublic: isPublic}).then(
+            axios.put('/books/'+ this.$route.params.id, {
+                    data: {
+                        isPublic: isPublic
+                    }
+                }).then(
                 res => {
                     this.isPublic = (isPublic == 'public')? true : false ;
                 }
@@ -86,7 +90,7 @@ export default{
         updateMarkdown(){
             let submitData = {
                 data: {
-                    markdown: this.markdown
+                    markdown: this.book.markdown
                 }
             }
             axios.put('/books/'+ this.$route.params.id, submitData).then(
