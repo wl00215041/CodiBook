@@ -1,28 +1,21 @@
 <template>
 <Row>
     <mind-map-card v-for="(mindmap, index) in mindmaps" :mindmap="mindmap" :key="index" @delete="onDeleteMindMap"></mind-map-card>
-    <Modal v-model="modal2" width="360">
-        <p slot="header" style="color:#f60;text-align:center">
-            <Icon type="ios-information-circle"></Icon>
-            <span>Delete confirmation</span>
-        </p>
-        <div style="text-align:center">
-            <p>Will you delete <Tag color="magenta">{{ selectedMindMap.name }}</Tag> ?</p>
-            <p>Input MindMap name:<input type="text" v-model="deleteComfirmName"></p>
-        </div>
-        <div slot="footer">
-            <Button type="error" size="large" long :loading="modal_loading" @click="deleteMindMap">Delete</Button>
-        </div>
-    </Modal>
+    <alert-delete v-model="modal2" :objectName="selectedMindMap.name" @deleteConfirmed="deleteMindMap"></alert-delete>
 </Row>
 </template>
 
 <script>
 window.Vue = require('vue');
-Vue.component('mind-map-card', require('./widget/MindMapCard.vue'));
 import { mapState, mapActions } from 'vuex'
+import AlertDelete from '../../../components/widget/AlertDelete.vue'
+import MindMapCard from './widget/MindMapCard.vue'
 
 export default {
+    components: {
+        AlertDelete,
+        MindMapCard
+    },
     mounted(){
         this.$store.dispatch('mindmaps/getList').then(() => this.showTips());
     },
@@ -32,7 +25,6 @@ export default {
     data(){
         return {
             modal2: false,
-            modal_loading: false,
             selectedMindMap: {},
             deleteComfirmName: ''
         }
@@ -51,23 +43,14 @@ export default {
            this.modal2 = true;
            this.selectedMindMap = mindmap
         },
-        deleteMindMap () {
-            if(this.selectedMindMap.name != this.deleteComfirmName){
-                this.$Message.warning('Incorrect comfirmation Name');
-                return;
-            }
-            this.modal_loading = true;
-
+        deleteMindMap (confirmed) {
+            if(!confirmed)return;
             this.$store.dispatch('mindmaps/deleteMindMaps', this.selectedMindMap.id).then(
                 ()=> this.$Message.success('Successfully delete')
             ).catch(
                 res => this.$Message.error('Error delete')
             );
-
-
             this.selectedMindMap = {};
-            this.deleteComfirmName = '';
-            this.modal_loading = false;
             this.modal2 = false;
         },
     },

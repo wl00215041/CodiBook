@@ -22,11 +22,9 @@
         },
         methods: {
             getBook(){
-                axios.get('/books/' + this.$route.params.id).then(
-                    (book) => {
-                        this.books.push(book.data);
-                    }
-                ).catch(res=>this.markdown = 'Not Found or No Permission')
+                axios.get('/books/' + this.$route.params.id)
+                    .then(book => this.books.push(book.data))
+                    .catch(res=>this.markdown = 'Not Found or No Permission')
             },
             submit(card) {
                 let submitData = {
@@ -35,11 +33,9 @@
                         description: card.description
                     }
                 }
-                axios.put('/books/' + this.$route.params.id, submitData).then(
-                    res => this.$router.push({ path: '/' })
-                ).catch(
-                    error => alert(error)
-                )
+                axios.put('/books/' + this.$route.params.id, submitData)
+                  .then(res => this.$router.push({ path: '/' }))
+                  .catch(error => alert(error))
             }
         }
     }
