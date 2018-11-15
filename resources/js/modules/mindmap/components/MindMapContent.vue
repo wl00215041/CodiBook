@@ -105,6 +105,7 @@ export default {
             handleUploaded: false,
             fullscreen: false,
             windowHeight: 0,
+            saved: true,
             themes: [
                 'primary',
                 'warning',
@@ -137,7 +138,9 @@ export default {
                     this.mind.show(jsMind.util.json.string2json(res.data.mindmap))
                     this.setTheme(this.data.style);
                 }
-            ).catch(res=>this.mindmap = 'Not Found or No Permission')
+            ).then(()=>{
+                this.setLeaveConfirm(false);
+            }).catch(res=>this.mindmap = 'Not Found or No Permission')
         },
         addNode(){
             let nodeid = jsMind.util.uuid.newid();
@@ -163,7 +166,7 @@ export default {
             }
             axios.put('/mindmaps/'+ this.$route.params.id, submitData).then(
                 res => this.$Message.success('Update successful')
-            )
+            ).then(()=>this.setLeaveConfirm(false))
         },
         download(){
             let mind_data = this.mind.get_data('freemind');
@@ -231,6 +234,17 @@ export default {
         },
         fullscreenChange (fullscreen) {
             this.fullscreen = fullscreen
+        },
+        setLeaveConfirm(needConfirm){
+            if(needConfirm){
+                window.document.body.onbeforeunload = () => {
+                    return "Do you really want to leave? you have unsaved changes!"
+                }
+                this.saved = false;
+            }else{
+                window.document.body.onbeforeunload = null;
+                this.saved = true;
+            }
         }
     },
     computed: {
@@ -255,8 +269,7 @@ export default {
                 Vue.set(this.selectedNode.data, 'background-color', value);
                 this.mind.set_node_color(this.selectedNode.id, value, this.selectedNodeForegroundColor);
             }
-        }
-        ,
+        },
         selectedNodeForegroundColor: {
             get(){
                 return this.selectedNode.data['foreground-color'] || '';
@@ -274,14 +287,35 @@ export default {
                 this.data.style = value;
                 this.setTheme(value);
             }
-        }
-        
+        },
+        mindMapObj(){
+            if(Object.keys(this.data).length == 0) return {};
+            return this.mind.get_data() || {};
+        },
     },
     watch: {
         tmpNode: {
             backgrounColor: 'setColor',
             foregroundColor: 'this.setColor'
         },
+        mindMapObj(value) {
+            this.saved = false;
+            this.setLeaveConfirm(true);
+        }
+    },
+    beforeRouteLeave (to, from , next) {
+        if(this.saved === false){
+            let confirm = window.confirm('Do you really want to leave? you have unsaved changes!');
+            if (confirm) {
+                next()
+            } else {
+                next(false)
+            }
+            this.setLeaveConfirm(!confirm);
+        }else{
+            this.setLeaveConfirm(false);
+            next();
+        }
     }
 }
 </script>
