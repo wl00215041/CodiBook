@@ -1,4 +1,10 @@
 {
-    "/js/app.js": "/js/app.js",
-    "/css/app.css": "/css/app.css"
+    "/build/main.bundle.js": "/build/main.bundle.js",
+    "/1.d9b3d606696887f9a6c5.hot-update.js": "/1.d9b3d606696887f9a6c5.hot-update.js",
+    "/1.c23a2b7974f09b10844f.hot-update.js": "/1.c23a2b7974f09b10844f.hot-update.js",
+    "/1.4aa2091ac9b1b663c14b.hot-update.js": "/1.4aa2091ac9b1b663c14b.hot-update.js",
+    "/1.caca7aa5950bb468452f.hot-update.js": "/1.caca7aa5950bb468452f.hot-update.js",
+    "/1.0c9da48702fab898701f.hot-update.js": "/1.0c9da48702fab898701f.hot-update.js",
+    "/1.8abe3af6488fe69c4e1f.hot-update.js": "/1.8abe3af6488fe69c4e1f.hot-update.js",
+    "/1.d3eb2085acebfc56772d.hot-update.js": "/1.d3eb2085acebfc56772d.hot-update.js"
 }
