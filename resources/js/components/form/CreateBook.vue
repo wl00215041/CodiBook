@@ -10,6 +10,7 @@
 </template>
 
 <script>
+    import Vue from 'vue'
     Vue.component('book-form', require('./BookForm.vue'));
     export default{
         data(){

@@ -1,6 +1,8 @@
 <template>
 <Row>
-    <book-card v-for="(book, index) in books" :book="book" :key="index" @delete="onDeleteBook"></book-card>
+    <transition-group name="fadeLeft" tag="ul">
+        <book-card v-for="(book, index) in books" :book="book" :key="index" @delete="onDeleteBook"></book-card>
+    </transition-group>
     <alert-delete v-model="modal2" :objectName="selectedBook.name" @deleteConfirmed="deleteBook"></alert-delete>
 </Row>
 </template>

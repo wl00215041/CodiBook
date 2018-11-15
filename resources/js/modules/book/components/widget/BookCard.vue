@@ -19,9 +19,19 @@
 <script>
     export default({
         props: {
-          'book': Object
+          /**
+           * Book object
+           */
+          'book': {
+            type: Object,
+            required: true
+          }
         },
         methods: {
+         /** Create delete event when user click X
+         * @event delete
+         * @type {book}
+         */
           deleteBook(){
             this.$emit('delete', this.book);
           }
