@@ -4,6 +4,7 @@ pipeline:
     commands:
       - npm install
       - npm audit
+      - npm audit fix
   docker:
     image: plugins/docker
     registry: dhub.promise.com.tw:5000
