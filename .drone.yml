@@ -3,7 +3,6 @@ pipeline:
     image: node:8
     commands:
       - npm install
-      - npm audit
       - npm audit fix
   docker:
     image: plugins/docker
