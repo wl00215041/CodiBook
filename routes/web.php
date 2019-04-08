@@ -18,9 +18,10 @@ use Illuminate\Http\Request;
 Route::get('/public', function(){
     return view('public');
 });
-
+Route::post('/gettoc', 'BookController@getTOC');
 Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
 Route::resource('books', 'BookController');
 Route::resource('mindmaps', 'MindMapController');
+

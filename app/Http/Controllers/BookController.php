@@ -7,6 +7,8 @@ use App\Note;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use PHPHtmlParser\Dom;
+use App\Utils\MarkdownTableOfContents;
 
 class BookController extends Controller
 {
@@ -101,5 +103,23 @@ class BookController extends Controller
         }else{
             return abort(404);
         }
+    }
+
+    public function getTOC(Request $request)
+    {
+        $dom = new Dom;
+        $dom->setOptions([
+            'preserveLineBreaks' => true, // Set a global option to enable strict html parsing.
+        ]);
+        $url = $request->input('url');
+        $content = file_get_contents($url);
+        $dom->load($content);
+        //$dom->loadFromUrl($url);
+        $markdown = $dom->find('#doc')[0]->text;
+
+        $toc = new MarkdownTableOfContents($markdown, $url);
+
+        return $toc->process();
+
     }
 }

@@ -17,7 +17,7 @@ class CreateBooksTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('description')->nullable();
-            $table->longText('markdown')->nullable();
+            $table->longText('markdown')->nullable()->default('');
             $table->unsignedInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->boolean("is_public")->default(false);
